@@ -1,11 +1,11 @@
-Sucursal,Fecha,Producto,Cantidad_Vendida,Monto_Total
-Sucursal Norte,2024-01-05,Manzanas,34,123.45
-Sucursal Sur,2024-01-12,Leche,12,45.67
-Sucursal Este,2024-01-03,Pan,-2,
-Sucursal Oeste,2024-01-09,Carne,78,456.78
-Sucursal Norte,2024-01-15,Pescado,100,320.15
-Sucursal Sur,2024-01-21,Manzanas,0,78.90
-Sucursal Este,2024-01-30,Leche,45,100.00
-Sucursal Oeste,2024-01-18,Pan,23,
-Sucursal Norte,2024-01-27,Carne,10,250.00
-Sucursal Sur,2024-01-25,Pescado,-5,50.25
+id,producto,cantidad,precio
+1,Manzana,10,0.50
+2,Plátano,20,0.30
+3,Naranja,15,0.45
+4,Piña,5,1.25
+5,Uvas,12,0.75
+6,Fresa,8,0.60
+7,Sandía,3,2.00
+8,Durazno,10,0.90
+9,Kiwi,7,1.10
+10,Mango,14,0.85
