@@ -1,0 +1,11 @@
+Proveedor,Fecha_Entrega,Producto,Calidad_Producto,Entrega_Tiempo
+Proveedor A,2024-01-05,Manzanas,Buena,Sí
+Proveedor B,2024-01-12,Leche,Regular,No
+Proveedor C,2024-01-03,Pan,Mala,Sí
+Proveedor A,2024-01-09,Carne,Buena,
+Proveedor B,2024-01-15,Pescado,,No
+Proveedor C,2024-01-21,Manzanas,Regular,Sí
+Proveedor A,2024-01-30,Leche,Mala,
+Proveedor B,2024-01-18,Pan,Buena,Sí
+Proveedor C,2024-01-27,Carne,,No
+Proveedor A,2024-01-25,Pescado,Regular,Sí

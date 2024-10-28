@@ -1,0 +1,11 @@
+Sucursal,Fecha_Actualizacion,Producto,Cantidad_Actual,Discrepancia
+Sucursal Norte,2024-01-05,Manzanas,500,5
+Sucursal Sur,2024-01-12,Leche,300,-2
+Sucursal Este,2024-01-03,Pan,700,
+Sucursal Oeste,2024-01-09,Carne,450,10
+Sucursal Norte,2024-01-15,Pescado,600,15
+Sucursal Sur,2024-01-21,Manzanas,200,-5
+Sucursal Este,2024-01-30,Leche,100,20
+Sucursal Oeste,2024-01-18,Pan,750,
+Sucursal Norte,2024-01-27,Carne,900,-10
+Sucursal Sur,2024-01-25,Pescado,250,0
