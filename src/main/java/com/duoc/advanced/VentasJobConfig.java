@@ -10,14 +10,13 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
@@ -32,7 +31,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.support.JdbcTransactionManager;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
 @Configuration
@@ -72,6 +70,7 @@ public class VentasJobConfig {
                 .processor(ventasItemProcessor())
                 .writer(ventasItemWriter())
                 .faultTolerant()
+                .skipPolicy(customSkipPolicy())
                 .skip(InvalidDataException.class)
                 .skipLimit(10)
                 .skipPolicy(new FileVerificationSkipper()) // Política de salto para errores en lectura
@@ -115,11 +114,25 @@ public class VentasJobConfig {
     }
 
     @Bean
+    public SkipPolicy customSkipPolicy() {
+        return (Throwable t, long skipCount) -> {
+            logger.warn("CustomSkipPolicy - Excepción omitida: {}", t.getMessage());
+            if (t instanceof InvalidDataException && skipCount < 10) {
+                logger.warn("CustomSkipPolicy - Excepción omitida: {}", t.getMessage());
+                return true;  // Indica que la excepción se debe omitir
+            }
+            return false;
+        };
+    }
+
+    @Bean
     public SkipListener<Venta, InformeVenta> skipListener(FlatFileItemWriter<Venta> errorItemWriter) {
         logger.warn("Configurando SkipListener...");
+        
         return new SkipListener<Venta, InformeVenta>() {  // Tipos explícitos
             @Override
             public void onSkipInProcess(Venta item, Throwable t) {
+                logger.info("Tipo de excepción en SkipListener: {}", t.getClass().getName());
                 logger.warn("SkipListener activado - Error al procesar registro: {}", item);
                 try {
                     // Escribe el registro en el archivo de errores directamente
