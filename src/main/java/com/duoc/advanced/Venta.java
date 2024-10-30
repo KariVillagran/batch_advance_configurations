@@ -4,7 +4,7 @@ public class Venta {
     private Long id;
     private String producto;
     private int cantidad;
-    private double precio;
+    private Double precio;
 
     public Venta() {}
 
@@ -17,7 +17,7 @@ public class Venta {
     public int getCantidad() {
         return cantidad;
     }
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
     public void setId(Long id) {
@@ -29,7 +29,7 @@ public class Venta {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }   
 }
