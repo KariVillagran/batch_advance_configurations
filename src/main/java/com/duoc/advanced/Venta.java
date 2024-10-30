@@ -31,8 +31,5 @@ public class Venta {
     }
     public void setPrecio(double precio) {
         this.precio = precio;
-    }
-
-    
-    
+    }   
 }

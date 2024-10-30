@@ -1,5 +1,8 @@
 package com.duoc.advanced;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -7,6 +10,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -15,6 +19,7 @@ import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.support.JdbcTransactionManager;
 
@@ -34,9 +39,9 @@ public class VentasJobConfig {
     @Bean
     public Step consolidacionDiariaStep(JobRepository jobRepository, JdbcTransactionManager transactionManager,
                      FlatFileItemReader<Venta> itemReader, VentasItemProcessor itemProcessor,
-                     FlatFileItemWriter<Venta> itemWriter) {
+                     FlatFileItemWriter<InformeVenta> itemWriter) {
         return new StepBuilder("consolidacionDiariaStep", jobRepository)
-                .<Venta, Venta>chunk(10, transactionManager)
+                .<Venta, InformeVenta>chunk(10, transactionManager)
                 .reader(ventasItemReader())
                 .processor(ventasItemProcessor())
                 .writer(ventasItemWriter())
@@ -47,7 +52,8 @@ public class VentasJobConfig {
     public FlatFileItemReader<Venta> ventasItemReader() {
         return new FlatFileItemReaderBuilder<Venta>()
                 .name("ventasItemReader")
-                .resource(new FileSystemResource("consolidacion_diaria_ventas.csv")) // Ruta del archivo de entrada
+                .resource(new ClassPathResource("consolidacion_diaria_ventas.csv")) // Ruta del archivo de entrada
+                .linesToSkip(1)
                 .delimited()
                 .names("id", "producto", "cantidad", "precio")
                 .targetType(Venta.class)
@@ -60,18 +66,26 @@ public class VentasJobConfig {
     }
 
     @Bean
-    public FlatFileItemWriter<Venta> ventasItemWriter() {
+    public FlatFileItemWriter<InformeVenta> ventasItemWriter() {
         // Configuración del escritor para escribir el archivo CSV de salida
-        FlatFileItemWriter<Venta> writer = new FlatFileItemWriter<>();
+        FlatFileItemWriter<InformeVenta> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("output.csv"));
 
+        // Configuración del encabezado
+        writer.setHeaderCallback(new FlatFileHeaderCallback() {
+            @Override
+            public void writeHeader(Writer writer) throws IOException {
+                writer.write("Producto,Cantidad Total,Total Ventas"); // Escribe el encabezado
+            }
+        });
+
         // Definir el formato de escritura
-        DelimitedLineAggregator<Venta> lineAggregator = new DelimitedLineAggregator<>();
+        DelimitedLineAggregator<InformeVenta> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
 
         // Definir el mapeo de campos
-        BeanWrapperFieldExtractor<Venta> fieldExtractor = new BeanWrapperFieldExtractor<>();
-        fieldExtractor.setNames(new String[]{"producto", "cantidad", "precio"});
+        BeanWrapperFieldExtractor<InformeVenta> fieldExtractor = new BeanWrapperFieldExtractor<>();
+        fieldExtractor.setNames(new String[]{"producto", "cantidadTotal", "totalVentas"});
         lineAggregator.setFieldExtractor(fieldExtractor);
 
         writer.setLineAggregator(lineAggregator);

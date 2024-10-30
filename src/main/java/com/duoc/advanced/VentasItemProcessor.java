@@ -2,13 +2,13 @@ package com.duoc.advanced;
 
 import org.springframework.batch.item.ItemProcessor;
 
-public class VentasItemProcessor implements ItemProcessor<Venta, Venta> {
+public class VentasItemProcessor implements ItemProcessor<Venta, InformeVenta> {
     @Override
-    public Venta process(Venta venta) throws Exception {
-        Venta informe = new Venta();
+    public InformeVenta process(Venta venta) throws Exception {
+        InformeVenta informe = new InformeVenta();
         informe.setProducto(venta.getProducto());
-        informe.setCantidad(venta.getCantidad());
-        informe.setPrecio(venta.getCantidad() * venta.getPrecio());
+        informe.setCantidadTotal(venta.getCantidad());
+        informe.setTotalVentas(venta.getCantidad() * venta.getPrecio());
         return informe;
     }
 }
