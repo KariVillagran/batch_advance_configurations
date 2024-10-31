@@ -1,4 +1,4 @@
-package com.duoc.advanced;
+package com.duoc.jobs;
 
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;

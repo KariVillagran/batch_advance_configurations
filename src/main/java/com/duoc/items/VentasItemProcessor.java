@@ -1,14 +1,15 @@
-package com.duoc.advanced;
+package com.duoc.items;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 
-/**
- * Procesador de items en Spring Batch que convierte un objeto de tipo Venta en un objeto de tipo InformeVenta.
- * Este procesador realiza la transformación de los datos de cada venta, calculando el total de ventas
- * basado en la cantidad y el precio de cada producto.
- */
+import com.duoc.business.InformeVenta;
+import com.duoc.business.InvalidDataException;
+import com.duoc.business.Venta;
+
+@Component
 public class VentasItemProcessor implements ItemProcessor<Venta, InformeVenta> {
     private static final Logger logger = LoggerFactory.getLogger(VentasItemProcessor.class);
 

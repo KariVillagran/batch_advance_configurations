@@ -1,4 +1,4 @@
-package com.duoc.advanced;
+package com.duoc.business;
 
 public class Venta {
     private Long id;
